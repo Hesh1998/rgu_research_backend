@@ -10,7 +10,8 @@ CORS(app)
 
 @app.route("/test", methods=["GET"])
 def test():
-    return "Success", 200
+    query = "select * from dwh.gold.sales_fact left outer join dwh.gold.currency_dim ON dwh.gold.sales_fact.currency_sk = dwh.gold.currency_dim.currency_sk limit 100;"
+    return query, 200
 
 
 # Run Flask application
