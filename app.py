@@ -1,7 +1,7 @@
 # Import dependencies
 from flask import Flask
 from flask_cors import CORS
-import boto3, json, base64, botocore
+import boto3, json, base64
 
 
 # Create Flask application
@@ -11,13 +11,12 @@ CORS(app)
 
 @app.route("/test", methods=["GET"])
 def test():
-    session = boto3.Session(profile_name='aws-cli-user', region_name='ap-southeast-1')
-    client = session.client("secretsmanager")
-
     try:
+        client = boto3.client('secretsmanager', region_name='ap-southeast-1')
         secret = client.get_secret_value(SecretId='rgu/research/openai')
-        return secret, 200
-    except botocore.exceptions.ClientError as e:
+        creds = json.loads(secret['SecretString'])
+        return creds['key'], 200
+    except Exception as e:
         return str(e), 500
 
 # Run Flask application
