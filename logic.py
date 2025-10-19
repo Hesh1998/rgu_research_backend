@@ -1,17 +1,17 @@
 import boto3, json
 from openai import OpenAI
 import gpt_prompt
-
-client = boto3.client('secretsmanager', region_name='ap-southeast-1')
+    
+client_sm = boto3.client('secretsmanager', region_name='ap-southeast-1')
 
 def get_query_gpt():
     print(gpt_prompt.prompt)
-    secret = client.get_secret_value(SecretId='rgu/research/openai')
+    secret = client_sm.get_secret_value(SecretId='rgu/research/openai')
     creds = json.loads(secret['SecretString'])
     
-    client = OpenAI(api_key=creds['key'])
+    client_gpt = OpenAI(api_key=creds['key'])
 
-    response = client.responses.create(
+    response = client_gpt.responses.create(
         model="gpt-5",
         input="What is the capital of France?"
     )
