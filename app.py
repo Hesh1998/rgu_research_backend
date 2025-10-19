@@ -1,6 +1,7 @@
 # Import dependencies
 from flask import Flask
 from flask_cors import CORS
+import boto3, json, base64, botocore
 
 
 # Create Flask application
@@ -10,9 +11,14 @@ CORS(app)
 
 @app.route("/test", methods=["GET"])
 def test():
-    query = "select * from dwh.gold.sales_fact left outer join dwh.gold.currency_dim ON dwh.gold.sales_fact.currency_sk = dwh.gold.currency_dim.currency_sk limit 100;"
-    return query, 200
+    session = boto3.Session(profile_name='aws-cli-user', region_name='ap-southeast-1')
+    client = session.client("secretsmanager")
 
+    try:
+        secret = client.get_secret_value(SecretId='rgu/research/openai')
+        return secret, 200
+    except botocore.exceptions.ClientError as e:
+        return str(e), 500
 
 # Run Flask application
 if __name__ == "__main__":
