@@ -23,7 +23,7 @@ def test():
             input="Write a short bedtime story about a unicorn."
         )
 
-        return response, 200
+        return response.output_text, 200
     except Exception as e:
         return str(e), 500
 
