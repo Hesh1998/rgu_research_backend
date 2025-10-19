@@ -1,8 +1,9 @@
 import boto3, json
 from openai import OpenAI
 
+client = boto3.client('secretsmanager', region_name='ap-southeast-1')
+
 def get_query_gpt():
-    client = boto3.client('secretsmanager', region_name='ap-southeast-1')
     secret = client.get_secret_value(SecretId='rgu/research/openai')
     creds = json.loads(secret['SecretString'])
     
