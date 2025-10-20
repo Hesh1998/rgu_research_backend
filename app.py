@@ -14,9 +14,7 @@ def query_dwh():
     data = request.get_json()
     llm = data.get("llm")
     question = data.get("question")
-    print(llm)
-    print(question)
-    
+
     try:
         response = logic.get_query_gpt()
         return response, 200
