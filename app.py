@@ -1,5 +1,5 @@
 # Import dependencies
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
 import logic
 
@@ -9,8 +9,14 @@ app = Flask(__name__)
 CORS(app)
 
 
-@app.route("/query_dwh", methods=["GET"])
+@app.route("/query_dwh", methods=["POST"])
 def query_dwh():
+    data = request.get_json()
+    llm = data.get("llm")
+    question = data.get("question")
+    print(llm)
+    print(question)
+    
     try:
         response = logic.get_query_gpt()
         return response, 200
