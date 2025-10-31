@@ -10,9 +10,28 @@ def get_query_gpt():
     
     client_gpt = OpenAI(api_key=creds['key'])
 
+    # response = client_gpt.responses.create(
+    #     model="gpt-5",
+    #     input="What is the capital of France?"
+    # )
+
+    content_system = """
+    You are an intelligent assistant that always returns answers in a valid JSON format.
+    Each JSON must contain a single key-value pair where the key is a short identifier
+    (like 'answer' or 'query') and the value is the response content.
+    """
+
+    content_user = """
+    What is the capital of France?
+    """
+
     response = client_gpt.responses.create(
         model="gpt-5",
-        input="What is the capital of France?"
+        response_format={ "type": "json_object" },
+        input=[
+            {"role": "system", "content": f"{content_system}"},
+            {"role": "user", "content": f"{content_user}"}
+        ]
     )
 
     return response.output_text
