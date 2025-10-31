@@ -25,12 +25,12 @@ def get_query_gpt():
     What is the capital of France?
     """
 
-    response = client_gpt.responses.create(
+    response = client_gpt.chat.completions.create(
         model="gpt-5",
         response_format={ "type": "json_object" },
-        input=[
-            {"role": "system", "content": f"{content_system}"},
-            {"role": "user", "content": f"{content_user}"}
+        messages=[
+            {"role": "system", "content": content_system.strip()},
+            {"role": "user", "content": content_user.strip()}
         ]
     )
 
