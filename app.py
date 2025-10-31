@@ -17,7 +17,13 @@ def query_dwh():
 
     try:
         query = logic.get_query(llm, question)
-        response = logic.get_query_result(query)
+        result = logic.get_query_result(query)
+
+        response = {
+            "query": query,
+            "result": result
+        }
+        
         return response, 200
     except Exception as e:
         return str(e), 500
