@@ -10,34 +10,12 @@ def get_query_gpt():
     
     client_gpt = OpenAI(api_key=creds['key'])
 
-    # response = client_gpt.responses.create(
-    #     model="gpt-5",
-    #     input="What is the capital of France?"
-    # )
-
-    content_system = """
-                    You are an expert SQL generator.
-                    Given a database schema and a natural language question,
-                    you must produce a valid SQL query that can be executed on that schema.
-
-                    Output must be a valid JSON object in this exact format:
-                    {
-                    "query": "SELECT ..."
-                    }
-
-                    Do not include explanations, comments, or any other text.
-                    """
-
-    content_user = """
-    What is the product with most sales?
-    """
-
     response = client_gpt.chat.completions.create(
         model="gpt-5",
         response_format={ "type": "json_object" },
         messages=[
-            {"role": "system", "content": content_system.strip()},
-            {"role": "user", "content": content_user.strip()}
+            {"role": "system", "content": gpt_prompt.content_system.strip()},
+            {"role": "user", "content": gpt_prompt.content_user.strip()}
         ]
     )
 
