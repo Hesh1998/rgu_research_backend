@@ -12,6 +12,7 @@ Rules:
 - Do not include comments, explanations, or any other text.
 """
 
+
 content_user = """
 Data warehouse: Sales DWH (Snowflake schema)
 Fact table: dwh.gold.sales_fact(order_number INT, line_item INT, order_date DATE, delivery_date DATE, customer_sk INT, store_sk INT, product_sk INT, quantity INT, currency_sk BIGINT)

@@ -1,14 +1,19 @@
+import os
 import boto3, json
 from openai import OpenAI
 import gpt_prompt
-    
+from databricks import sql
+
+
 client_sm = boto3.client('secretsmanager', region_name='ap-southeast-1')
 
-def get_response(llm, question):
+
+def get_query(llm, question):
     if llm == "gpt-5":
         return get_query_gpt(question)
     else:
         return "Error: Unsupported LLM specified."
+
 
 def get_query_gpt(question):
     secret = client_sm.get_secret_value(SecretId='rgu/research/openai')
@@ -29,3 +34,25 @@ def get_query_gpt(question):
     json_object = json.loads(response_text)
     key, query = next(iter(json_object.items()))
     return query
+
+
+def get_query_result(query):
+    secret = client_sm.get_secret_value(SecretId='rgu/research/databricks')
+    creds = json.loads(secret['SecretString'])
+    token = creds['key']
+
+    connection = sql.connect(
+                            server_hostname = "dbc-c7a0eacf-9a5e.cloud.databricks.com",
+                            http_path = "/sql/1.0/warehouses/bed6110085302b78",
+                            access_token = token)
+
+    cursor = connection.cursor()
+
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    result_text = "\n".join([str(row) for row in rows])
+
+    cursor.close()
+    connection.close()
+
+    return result_text
