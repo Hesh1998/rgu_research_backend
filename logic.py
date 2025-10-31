@@ -16,13 +16,20 @@ def get_query_gpt():
     # )
 
     content_system = """
-    You are an intelligent assistant that always returns answers in a valid JSON format.
-    Each JSON must contain a single key-value pair where the key is a short identifier
-    (like 'answer' or 'query') and the value is the response content.
-    """
+                    You are an expert SQL generator.
+                    Given a database schema and a natural language question,
+                    you must produce a valid SQL query that can be executed on that schema.
+
+                    Output must be a valid JSON object in this exact format:
+                    {
+                    "query": "SELECT ..."
+                    }
+
+                    Do not include explanations, comments, or any other text.
+                    """
 
     content_user = """
-    What is the capital of France?
+    What is the product with most sales?
     """
 
     response = client_gpt.chat.completions.create(
@@ -34,4 +41,7 @@ def get_query_gpt():
         ]
     )
 
-    return response.output_text
+    response_text = response.choices[0].message.content
+    json_object = json.loads(response_text)
+    key, query = next(iter(json_object.items()))
+    return query
