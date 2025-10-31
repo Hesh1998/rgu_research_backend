@@ -50,9 +50,12 @@ def get_query_result(query):
 
     cursor.execute(query)
     rows = cursor.fetchall()
-    result_text = "\n".join([str(row) for row in rows])
+    #result_text = "\n".join([str(row) for row in rows])
+    columns = [desc[0] for desc in cursor.description]
+    results = [dict(zip(columns, row)) for row in rows]
+    result_json = json.dumps(results, indent=2)
 
     cursor.close()
     connection.close()
 
-    return result_text
+    return result_json
