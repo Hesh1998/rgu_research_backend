@@ -16,7 +16,7 @@ def query_dwh():
     question = data.get("question")
 
     try:
-        response = logic.get_query_gpt()
+        response = logic.get_response(llm, question)
         return response, 200
     except Exception as e:
         return str(e), 500
