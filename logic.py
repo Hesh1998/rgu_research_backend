@@ -1,12 +1,15 @@
+# Import dependencies
 import boto3, json
 from openai import OpenAI
 import gpt_prompt
 from databricks import sql
 
 
+# AWS Secrets Manager client
 client_sm = boto3.client('secretsmanager', region_name='ap-southeast-1')
 
 
+# Generate the SQL query using the selected LLM based on the NL question
 def get_query(llm, question):
     if llm == "gpt-5":
         return get_query_gpt(question)
@@ -14,6 +17,7 @@ def get_query(llm, question):
         return "Error: Unsupported LLM specified."
 
 
+# SQL query generation using OpenAI GPT-5
 def get_query_gpt(question):
     secret = client_sm.get_secret_value(SecretId='rgu/research/openai')
     creds = json.loads(secret['SecretString'])
@@ -35,6 +39,7 @@ def get_query_gpt(question):
     return query
 
 
+# Execute the SQL query on Databricks and return the result
 def get_query_result(query):
     secret = client_sm.get_secret_value(SecretId='rgu/research/databricks')
     creds = json.loads(secret['SecretString'])

@@ -1,3 +1,5 @@
+# Prompt for OpenAI GPT-5
+
 content_system = """
 You are a Databricks SQL generator.
 

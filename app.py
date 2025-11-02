@@ -8,7 +8,7 @@ import logic
 app = Flask(__name__)
 CORS(app)
 
-
+# Endpoint to query data warehouse using NL
 @app.route("/query_dwh", methods=["POST"])
 def query_dwh():
     data = request.get_json()
