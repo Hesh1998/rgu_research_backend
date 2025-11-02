@@ -1,5 +1,5 @@
 # Import dependencies
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import logic
 
@@ -23,8 +23,8 @@ def query_dwh():
             "query": query,
             "result": result
         }
-        
-        return response, 200
+
+        return jsonify(response), 200
     except Exception as e:
         return str(e), 500
 
