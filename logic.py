@@ -1,4 +1,3 @@
-import os
 import boto3, json
 from openai import OpenAI
 import gpt_prompt
