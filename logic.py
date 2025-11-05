@@ -3,6 +3,7 @@ import boto3, json
 from openai import OpenAI
 from google import genai
 import gpt_prompt
+import gemini_prompt
 from databricks import sql
 
 
@@ -51,17 +52,13 @@ def get_query_gemini(question):
 
     response = client_gemini.models.generate_content(
         model="gemini-2.5-pro",
-        contents=[
-            {"role": "system", "content": gpt_prompt.content_system.strip()},
-            {"role": "user", "content": gpt_prompt.content_user.strip() + " " + question.strip()}
-        ],
+        contents=gemini_prompt.content.strip() + " " + question.strip(),
         config={
-            "response_mime_type": "application/json",
-            "response_schema": dict 
-        }
+            "response_mime_type": "application/json"
+        },
     )
-
-    return response
+    
+    return response.text
 
 
 # Execute the SQL query on Databricks and return the result
