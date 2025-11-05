@@ -54,7 +54,7 @@ def get_query_gemini(question):
         contents="Explain how AI works in a few words",
     )
 
-    print(response.text)
+    return response.text
 
 
 # Execute the SQL query on Databricks and return the result
