@@ -88,7 +88,9 @@ def get_query_claude(question):
     )
 
     response_text = response.content[0].text
-    return response_text
+    json_object = json.loads(response_text)
+    key, query = next(iter(json_object.items()))
+    return query
 
 
 # Execute the SQL query on Databricks and return the result
