@@ -1,6 +1,7 @@
 # Import dependencies
 import boto3, json
 from openai import OpenAI
+from google import genai
 import gpt_prompt
 from databricks import sql
 
@@ -13,6 +14,8 @@ client_sm = boto3.client('secretsmanager', region_name='ap-southeast-1')
 def get_query(llm, question):
     if llm == "gpt-5":
         return get_query_gpt(question)
+    elif llm == "gem-2.5-pro":
+        return get_query_gemini(question)
     else:
         return "Error: Unsupported LLM specified."
 
@@ -35,6 +38,30 @@ def get_query_gpt(question):
 
     response_text = response.choices[0].message.content
     json_object = json.loads(response_text)
+    key, query = next(iter(json_object.items()))
+    return query
+
+
+# SQL query generation using Google Gemini 2.5 Pro
+def get_query_gemini(question):
+    secret = client_sm.get_secret_value(SecretId='rgu/research/gemini')
+    creds = json.loads(secret['SecretString'])
+
+    client_gemini = genai.Client(api_key=creds['key'])
+
+    response = client_gemini.models.generate_content(
+        model="gemini-2.5-pro",
+        contents=[
+            {"role": "system", "content": gpt_prompt.content_system.strip()},
+            {"role": "user", "content": gpt_prompt.content_user.strip() + " " + question.strip()}
+        ],
+        config={
+            "response_mime_type": "application/json",
+            "response_schema": dict 
+        }
+    )
+
+    json_object = response.output[0].content[0].parsed
     key, query = next(iter(json_object.items()))
     return query
 
