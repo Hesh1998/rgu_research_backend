@@ -80,7 +80,7 @@ def get_query_claude(question):
     client_claude = anthropic.Anthropic(api_key=creds['key'],)
 
     message = client_claude.messages.create(
-        model="claude-sonnet-4-5",
+        model="claude-opus-4-1",
         max_tokens=1024,
         messages=[
             {"role": "user", "content": "Hello, Claude"}
