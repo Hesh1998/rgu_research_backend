@@ -8,6 +8,7 @@ import logic
 app = Flask(__name__)
 CORS(app)
 
+
 # Endpoint to query data warehouse using NL
 @app.route("/query_dwh", methods=["POST"])
 def query_dwh():
@@ -28,20 +29,6 @@ def query_dwh():
     except Exception as e:
         return str(e), 500
     
-
-@app.route("/test", methods=["POST"])
-def test():
-    data = request.get_json()
-    llm = data.get("llm")
-    question = data.get("question")
-
-    try:
-        query = logic.get_query(llm, question)
-
-        return query, 200
-    except Exception as e:
-        return str(e), 500    
-
 
 # Run Flask application
 if __name__ == "__main__":
