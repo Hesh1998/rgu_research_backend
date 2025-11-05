@@ -79,15 +79,16 @@ def get_query_claude(question):
 
     client_claude = anthropic.Anthropic(api_key=creds['key'],)
 
-    message = client_claude.messages.create(
+    response = client_claude.messages.create(
         model="claude-opus-4-1",
-        max_tokens=1024,
+        max_tokens=2048,
+        system=gpt_prompt.content_system.strip(),
         messages=[
-            {"role": "user", "content": "Hello, Claude"}
+            {"role": "user", "content": gpt_prompt.content_user.strip() + " " + question.strip()}
         ]
     )
 
-    return str(message.content)
+    return str(response.content)
 
 
 # Execute the SQL query on Databricks and return the result
