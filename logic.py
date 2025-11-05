@@ -58,7 +58,9 @@ def get_query_gemini(question):
         },
     )
     
-    return response.text
+    json_object = json.loads(response.text)
+    key, query = next(iter(json_object.items()))
+    return query
 
 
 # Execute the SQL query on Databricks and return the result
