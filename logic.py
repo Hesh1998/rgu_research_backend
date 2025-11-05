@@ -87,7 +87,7 @@ def get_query_claude(question):
         ]
     )
 
-    return message.content
+    return str(message.content)
 
 
 # Execute the SQL query on Databricks and return the result
