@@ -28,7 +28,21 @@ def query_dwh():
         return jsonify(response), 200
     except Exception as e:
         return str(e), 500
-    
+
+
+@app.route("/test", methods=["POST"])
+def test():
+    data = request.get_json()
+    llm = data.get("llm")
+    question = data.get("question")
+
+    try:
+        query = logic.get_query(llm, question)
+
+        return query, 200
+    except Exception as e:
+        return str(e), 500
+
 
 # Run Flask application
 if __name__ == "__main__":

@@ -2,6 +2,7 @@
 import boto3, json
 from openai import OpenAI
 from google import genai
+import anthropic
 import gpt_prompt
 import gemini_prompt
 from databricks import sql
@@ -17,6 +18,8 @@ def get_query(llm, question):
         return get_query_gpt(question)
     elif llm == "gem-2.5-pro":
         return get_query_gemini(question)
+    elif llm == "opus-4.1":
+        return get_query_claude(question)
     else:
         return "Error: Unsupported LLM specified."
 
@@ -65,6 +68,26 @@ def get_query_gemini(question):
     json_object = json.loads(response.text)
     key, query = next(iter(json_object.items()))
     return query
+
+
+# SQL query generation using Anthropic Claude Opus 4.1
+def get_query_claude(question):
+    print("Generating query using Anthropic Claude Opus 4.1")
+
+    secret = client_sm.get_secret_value(SecretId='rgu/research/claude')
+    creds = json.loads(secret['SecretString'])
+
+    client_claude = anthropic.Anthropic(api_key=creds['key'],)
+
+    message = client_claude.messages.create(
+        model="claude-sonnet-4-5",
+        max_tokens=1024,
+        messages=[
+            {"role": "user", "content": "Hello, Claude"}
+        ]
+    )
+
+    print(message.content)
 
 
 # Execute the SQL query on Databricks and return the result
