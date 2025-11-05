@@ -3,8 +3,7 @@ import boto3, json
 from openai import OpenAI
 from google import genai
 import anthropic
-import gpt_prompt
-import gemini_prompt
+import gpt_prompt, gemini_prompt, claude_prompt
 from databricks import sql
 
 
@@ -82,13 +81,14 @@ def get_query_claude(question):
     response = client_claude.messages.create(
         model="claude-opus-4-1",
         max_tokens=2048,
-        system=gpt_prompt.content_system.strip(),
+        system=claude_prompt.content_system.strip(),
         messages=[
-            {"role": "user", "content": gpt_prompt.content_user.strip() + " " + question.strip()}
+            {"role": "user", "content": claude_prompt.content_user.strip() + " " + question.strip()}
         ]
     )
 
-    return str(response.content)
+    response_text = response.content[0].text
+    return response_text
 
 
 # Execute the SQL query on Databricks and return the result
