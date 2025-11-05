@@ -23,6 +23,8 @@ def get_query(llm, question):
 
 # SQL query generation using OpenAI GPT-5
 def get_query_gpt(question):
+    print("Generating query using OpenAI GPT-5")
+
     secret = client_sm.get_secret_value(SecretId='rgu/research/openai')
     creds = json.loads(secret['SecretString'])
     
@@ -45,6 +47,8 @@ def get_query_gpt(question):
 
 # SQL query generation using Google Gemini 2.5 Pro
 def get_query_gemini(question):
+    print("Generating query using Google Gemini 2.5 Pro")
+
     secret = client_sm.get_secret_value(SecretId='rgu/research/gemini')
     creds = json.loads(secret['SecretString'])
 
