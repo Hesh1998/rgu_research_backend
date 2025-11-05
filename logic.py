@@ -49,21 +49,12 @@ def get_query_gemini(question):
 
     client_gemini = genai.Client(api_key=creds['key'])
 
-    response = client_gemini.models.generate_content(
-        model="gemini-2.5-pro",
-        contents=[
-            {"role": "system", "content": gpt_prompt.content_system.strip()},
-            {"role": "user", "content": gpt_prompt.content_user.strip() + " " + question.strip()}
-        ],
-        config={
-            "response_mime_type": "application/json",
-            "response_schema": dict 
-        }
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents="Explain how AI works in a few words",
     )
 
-    json_object = response.output[0].content[0].parsed
-    key, query = next(iter(json_object.items()))
-    return query
+    print(response.text)
 
 
 # Execute the SQL query on Databricks and return the result
