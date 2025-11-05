@@ -49,7 +49,7 @@ def get_query_gemini(question):
 
     client_gemini = genai.Client(api_key=creds['key'])
 
-    response = client.models.generate_content(
+    response = client_gemini.models.generate_content(
         model="gemini-2.5-flash",
         contents="Explain how AI works in a few words",
     )
