@@ -1,6 +1,3 @@
-rgu_research_backend-main is the source code from main GIT branch of rgu_research_backend repository hosted on GitHub
-
-GitHub link - https://github.com/Hesh1998/rgu_research_backend.git
 * This is the codebase for the Backend of the Web Application which was hosted on AWS Cloud.
 * To run this code please follow below steps,
   1) Save the Databricks Access token as rgu/research/databricks on AWS Secrets Manager.
